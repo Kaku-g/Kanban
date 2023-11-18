@@ -1,0 +1,160 @@
+/* ---- RESET/BASIC STYLING ---- */
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+  
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+  
+  *::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .board {
+    width: 100%;
+    height: 100vh;
+    overflow: scroll;
+  
+    background-color: rgb(228,228,228);
+    background-position: center;
+    background-size: cover;
+  }
+  
+ 
+  
+ 
+  
+  /* ---- BOARD ---- */
+  .lanes {
+    display: flex;
+    align-items: flex-start;
+    justify-content: start;
+    gap: 16px;
+    
+
+    padding: 24px 32px;
+    
+    overflow: scroll;
+    height: 100%;
+  }
+  
+  .heading {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  
+  .swim-lane {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    height: 100%;
+   
+  
+    /* background: #f4f4f4;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.25); */
+  
+    padding: 12px;
+    border-radius: 4px;
+    width: 400px;
+    min-height: 120px;
+  
+    /* //flex-shrink: 0; */
+  }
+  
+  .task {
+    background: white;
+    color: black;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
+  
+    padding: 12px;
+    border-radius: 4px;
+  
+    font-size: 16px;
+    cursor: move;
+  }
+  
+  .is-dragging {
+    scale: 1.05;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.25);
+    background: rgb(50, 50, 50);
+    color: white;
+  }
+
+  @media only screen and (max-width: 53em) {
+    .lanes {
+      display: flex;
+      align-items: flex-start;
+      align-items: center;
+      gap: 16px;
+      flex-direction: column;
+      
+      padding: 24px 32px;
+      
+      overflow: scroll;
+      height: 100%;
+    }
+
+    .swim-lane{
+      margin-top: 10px;
+     height: 600px;
+     
+     overflow: scroll;
+    
+      
+    }
+   
+  }
+
+/* Medium devices such as tablets (768px and up) */
+@media only screen and (min-width: 54em)and (max-width:57rem) {
+  .lanes {
+    display: flex;
+    align-items: flex-start;
+    justify-content: start;
+    
+    gap: 16px;
+    
+flex-wrap: wrap;  
+    padding: 24px 32px;
+    
+    
+    height: 100%;
+  }
+  .swim-lane{
+    height: 100%;
+    
+  }
+  
+}
+
+@media only screen and (min-width:57.1rem)
+{
+  .lanes{
+    display: flex;
+    align-items: flex-start;
+    justify-content: start;
+    
+    gap: 16px;
+    
+    overflow-x: scroll;
+    padding: 24px 32px;
+    
+    
+    height: 100%;
+  }
+  .board{
+    width: 100vw;
+    overflow-x: scroll;
+  }
+}
+
+
+/* Large devices such as laptops (1024px and up) */
+/* @media only screen and (min-width: 64em) {...} */
+
+/* Largest devices such as desktops (1280px and up) */
+/* @media only screen and (min-width: 80em) {...} */
