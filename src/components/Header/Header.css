@@ -1,0 +1,23 @@
+.header{
+    height:50px;
+    width: 100%;
+    background-color: white;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.button{
+    cursor: pointer;
+    padding: 5px;
+    border: 1px solid gray;
+    margin-left: 10px;
+    border-radius: 5px;
+    animation:ease-in;
+
+}
+/* .button:hover{
+transform: scale(1.1);
+}
+.button:active{
+    transform: scale(0.9);
+} */

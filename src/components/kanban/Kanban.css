@@ -3,7 +3,7 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    font-family: sans-serif;
+    font-family: 'Poppins','sans-serif';
   
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
@@ -42,9 +42,9 @@
   }
   
   .heading {
-    font-size: 22px;
-    font-weight: bold;
+    font-size: 20px;
     margin-bottom: 8px;
+    
   }
   
   .swim-lane {
@@ -108,6 +108,25 @@
     }
    
   }
+
+  .count-gap{
+    margin-left: 5px;
+  }
+.kanban-headers{
+display: flex;
+align-items: center;
+justify-content: space-between;
+column-gap: 10px;
+}
+.kanban-headers-left{
+  display: flex;
+  column-gap: 5px;
+  align-items: center;
+  padding-left: 10px;
+}
+.const-icons{
+  margin-left: 25px;
+}
 
 /* Medium devices such as tablets (768px and up) */
 @media only screen and (min-width: 54em)and (max-width:57rem) {

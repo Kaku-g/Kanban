@@ -2,7 +2,16 @@ import React,{useEffect,useRef,useState} from 'react';
 import './Kanban.css';
 import { data } from '../../data/data';
 import Card from '../Card/Card';
-
+import Option from '../Options/Option';
+import { FaUser ,FaCheckCircle} from "react-icons/fa";
+import { RiTodoLine } from "react-icons/ri";
+import {IoMdAdd} from 'react-icons/io';
+import {PiSealWarningFill} from 'react-icons/pi';
+import { BiDotsHorizontalRounded } from "react-icons/bi";
+import { BsExclamationSquareFill } from "react-icons/bs";
+import { MdOutlinePendingActions } from "react-icons/md";
+import {BiSignal1,BiSignal2,BiSignal3,BiSignal4,BiSignal5} from 'react-icons/bi'
+import Header from '../Header/Header';
 const Kanban=()=> {
 
   const taskRef= useRef('null');
@@ -14,9 +23,38 @@ const Kanban=()=> {
   const [groupBy, setGroupBy] = useState('status');
   const [sortBy, setSortBy] = useState('');
   const [finalData,setFinalData]=useState();
+  const [options,setShowOptions]=useState(false);
 
   const { tickets, users } = data;
 
+  const iconData={
+    user:[
+      <FaUser/>,
+      <FaUser/>,
+      <FaUser/>,
+      <FaUser/>,
+      <FaUser/>,
+    ],
+    priority:[
+   <BiSignal1/>,
+   <BiSignal2/>,
+   <BiSignal3/>,
+   <BiSignal4/>,
+   <BiSignal5/>   ],
+    status:[
+      <RiTodoLine/>,
+      <FaCheckCircle/>,
+      <MdOutlinePendingActions/>
+    ]
+
+  }
+  const priorityData=[
+    'No Priority',
+'Low',
+'Medium',
+'High',
+'Urgent'
+  ]
  const groupTickets = () => {
     if (groupBy === 'status') {
       const groupedByStatus = {};
@@ -155,15 +193,29 @@ const Kanban=()=> {
 
 //   },[finalData])
     
+const setSort=(value)=>
+{
+     setSortBy(value);
+}
 
+const setGroup=(value)=>{
+
+  setGroupBy(value)
+}
+const showOptions=()=>{
+     setShowOptions(!options);
+}
 
     return (
 
 
 
     <div ref={boardRef} className="board">
+      <Header showOptions={showOptions}/>
+      {options!=false?  <Option sorting={setSort} grouping={setGroup} groupBy={groupBy} sortBy={sortBy}/>:''}
+     
       
-      <div className='group-by'>
+      {/* <div className='group-by'>
       <label>Group By:</label>
         <select value={groupBy} onChange={e => setGroupBy(e.target.value)}>
           <option value="status">Status</option>
@@ -179,16 +231,27 @@ const Kanban=()=> {
           <option value="priority">Priority</option>
          
         </select>
-      </div>
+      </div> */}
      
       <div className="lanes">
         { 
-           finalData && Object.keys(finalData).map(el=>(
+           finalData && Object.keys(finalData).map((el,index)=>(
             <div ref={laneRef} className="swim-lane">
-            <h3 className="heading">{el}</h3>
+              <div className="kanban-headers">
+                <div className='kanban-headers-left'>
+                <span style={{fontSize:'20px'}}>{iconData[groupBy][index]}</span> 
+                <span className="heading">{groupBy!='priority'?el:priorityData[el]}<span className='count-gap'></span><span style={{color:'gray',fontSize:'18px'}}>{finalData[el].length}</span></span>
+                </div>
+              
+                <div className="const-icons">
+                <span><IoMdAdd/></span> 
+                <span><BiDotsHorizontalRounded/></span>
+                </div>
+              
+              </div>
             {
                finalData&& finalData[el].map(task=>
-                <Card className='task' draggable='true' {...task} />
+                <Card groupBy={groupBy} sortBy={sortBy} className='task' draggable='true' {...task} />
                     // <p className='task' draggable='true'>{task.title}</p>
                 )
 

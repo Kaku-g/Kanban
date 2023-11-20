@@ -2,6 +2,7 @@
     box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
     width:400px;
     border-radius: 10px;
+    font-size: 14px;
 }
 
 .card-header{
@@ -13,7 +14,7 @@
 }
 
 .card-title{
-    width: 30=50px;
+    width: 380px;
 }
 .card-footer{
     margin-top: 10px;
@@ -23,25 +24,34 @@
 
 .card-tag{
     display: flex;
-    column-gap: 5px;
+    margin-left: 5px;
 }
 .card-tag-name{
     color: gray;
     border:1px solid rgb(228, 228, 228);
-    padding: 10px;
+    padding: 8px;
     border-radius: 10px;
+    display: flex;
     height: 40px;
 }
 .card-footer-icon{
     border: 1px solid rgb(228,228,228);
-    padding: 2px;
+    padding: 8px;
+    
     height: 40px;
     width: 40px;
     border-radius: 10px;
-  
+   color: gray;
+
+   
     
-    align-self: center;
-    
+}
+.card-status-color{
+    display: block;
+    width:20px;
+    height:20px;
+    color:rgb(117, 46, 46);
+    border-radius: 50%;
 }
 @media only screen and (max-width: 53em) {
 .card-body{
