@@ -102,11 +102,14 @@ const [users,setUsers]=useState('');
       // const { tickets, users } =await response.data;
        setTickets(response.data.tickets);
        setUsers(response.data.users);
+       let temp=localStorage.getItem('group');
+       setGroup(JSON.parse(temp))
     // console.log(response.data)
   }
   catch(error){
    console.log(error);
   }
+
  }
  fetchData();
 
@@ -181,17 +184,7 @@ const [users,setUsers]=useState('');
 
     }
   }
-     // setFinalData(sortTickets(groupTickets()))
-     // setFinalData(finalData)
-
      
-
-    // if(data){
-    //   sortTickets();
-    //   groupTickets();
-    //   sortTickets()
-      
-    // }
      
 
   },[finalData])
@@ -229,6 +222,7 @@ const setSort=(value)=>
 const setGroup=(value)=>{
 
   setGroupBy(value)
+  localStorage.setItem('group',JSON.stringify(value));
 }
 const showOptions=()=>{
      setShowOptions(!options);
