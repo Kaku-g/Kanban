@@ -7,7 +7,7 @@ const Option=({sorting,grouping,groupBy,sortBy})=> {
              <div className='group-by'>
       <label>Grouping</label>
         <select className='select' value={groupBy} onChange={(e)=>grouping(e.target.value)}>
-            
+            <option value="">Select</option>
           <option value="status">Status</option>
           <option value="user">User</option>
           <option value="priority">Priority</option>

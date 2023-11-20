@@ -1,6 +1,6 @@
 import React,{useEffect,useRef,useState} from 'react';
 import './Kanban.css';
-import { data } from '../../data/data';
+// import { data } from '../../data/data';
 import Card from '../Card/Card';
 import Option from '../Options/Option';
 import { FaUser ,FaCheckCircle} from "react-icons/fa";
@@ -12,6 +12,8 @@ import { BsExclamationSquareFill } from "react-icons/bs";
 import { MdOutlinePendingActions } from "react-icons/md";
 import {BiSignal1,BiSignal2,BiSignal3,BiSignal4,BiSignal5} from 'react-icons/bi'
 import Header from '../Header/Header';
+import { iconData,priorityData } from '../../data/iconData';
+import axios from 'axios';
 const Kanban=()=> {
 
   const taskRef= useRef('null');
@@ -20,41 +22,15 @@ const Kanban=()=> {
   let draggables='null';
   let droppables='null';
 
-  const [groupBy, setGroupBy] = useState('status');
+  const [groupBy, setGroupBy] = useState('');
   const [sortBy, setSortBy] = useState('');
   const [finalData,setFinalData]=useState();
   const [options,setShowOptions]=useState(false);
+const [data,setData]=useState();
+const [tickets,setTickets]=useState('');
+const [users,setUsers]=useState('');
 
-  const { tickets, users } = data;
 
-  const iconData={
-    user:[
-      <FaUser/>,
-      <FaUser/>,
-      <FaUser/>,
-      <FaUser/>,
-      <FaUser/>,
-    ],
-    priority:[
-   <BiSignal1/>,
-   <BiSignal2/>,
-   <BiSignal3/>,
-   <BiSignal4/>,
-   <BiSignal5/>   ],
-    status:[
-      <RiTodoLine/>,
-      <FaCheckCircle/>,
-      <MdOutlinePendingActions/>
-    ]
-
-  }
-  const priorityData=[
-    'No Priority',
-'Low',
-'Medium',
-'High',
-'Urgent'
-  ]
  const groupTickets = () => {
     if (groupBy === 'status') {
       const groupedByStatus = {};
@@ -116,14 +92,49 @@ const Kanban=()=> {
     });
     return cloneData;
   };
+
   useEffect(()=>{
+    const fetchData=async()=>{
+      try{
+       const response= await axios.get('https://api.quicksell.co/v1/internal/frontend-assignment')
+       setData(response.data)
+
+      // const { tickets, users } =await response.data;
+       setTickets(response.data.tickets);
+       setUsers(response.data.users);
+    // console.log(response.data)
+  }
+  catch(error){
+   console.log(error);
+  }
+ }
+ fetchData();
+
+
+ 
+ 
+
+   
+
+  if(data){
+   
+    
+    setFinalData(groupTickets())
+    
+  }
+  },[])
+
+ 
+  useEffect(()=>{
+    if(data){
     if(boardRef.current){
     draggables = boardRef.current.querySelectorAll('.task');
      droppables = boardRef.current.querySelectorAll('.swim-lane');
     }
 
  
-    console.log(data)
+   // console.log(data)
+   if(tickets && users){
     draggables.forEach((task) => {
         task.addEventListener("dragstart", () => {
           task.classList.add("is-dragging");
@@ -167,31 +178,48 @@ const Kanban=()=> {
       
         return closestTask;
       };
+
+    }
+  }
      // setFinalData(sortTickets(groupTickets()))
      // setFinalData(finalData)
-     sortTickets(finalData);
+
+     
+
+    // if(data){
+    //   sortTickets();
+    //   groupTickets();
+    //   sortTickets()
+      
+    // }
+     
 
   },[finalData])
+  useEffect(()=>{
+    setFinalData(sortTickets())
+  },[tickets,users])
 
   useEffect(()=>{
+   
+     if(data){
 
     let d= groupTickets();
-   //  let temp= sortTickets(d);
     setFinalData(d);
-    console.log(d);
+    //console.log(d);
+     }
   },[groupBy])
 
   useEffect(()=>{
-    if(finalData){
+    if(data && finalData){
     let k=sortTickets();
     setFinalData(k);
-    console.log(k);
+   // console.log(k);
     }
     
   },[sortBy])
-//   useEffect(()=>{
 
-//   },[finalData])
+  
+
     
 const setSort=(value)=>
 {
@@ -207,65 +235,53 @@ const showOptions=()=>{
 }
 
     return (
-
-
-
-    <div ref={boardRef} className="board">
-      <Header showOptions={showOptions}/>
-      {options!=false?  <Option sorting={setSort} grouping={setGroup} groupBy={groupBy} sortBy={sortBy}/>:''}
-     
-      
-      {/* <div className='group-by'>
-      <label>Group By:</label>
-        <select value={groupBy} onChange={e => setGroupBy(e.target.value)}>
-          <option value="status">Status</option>
-          <option value="user">User</option>
-          <option value="priority">Priority</option>
-        </select>
-      </div>
-      <div className='sort-by'>
-      <label>Sort By:</label>
-        <select value={sortBy} onChange={e => setSortBy(e.target.value)}>
-         <option value="">Select</option>
-        <option value="title">Title</option>
-          <option value="priority">Priority</option>
-         
-        </select>
-      </div> */}
-     
-      <div className="lanes">
-        { 
-           finalData && Object.keys(finalData).map((el,index)=>(
-            <div ref={laneRef} className="swim-lane">
-              <div className="kanban-headers">
-                <div className='kanban-headers-left'>
-                <span style={{fontSize:'20px'}}>{iconData[groupBy][index]}</span> 
-                <span className="heading">{groupBy!='priority'?el:priorityData[el]}<span className='count-gap'></span><span style={{color:'gray',fontSize:'18px'}}>{finalData[el].length}</span></span>
-                </div>
-              
-                <div className="const-icons">
-                <span><IoMdAdd/></span> 
-                <span><BiDotsHorizontalRounded/></span>
-                </div>
-              
-              </div>
-            {
-               finalData&& finalData[el].map(task=>
-                <Card groupBy={groupBy} sortBy={sortBy} className='task' draggable='true' {...task} />
-                    // <p className='task' draggable='true'>{task.title}</p>
-                )
-
-            }
-            
+      <div>
+        <h2>Select display options</h2>
+{data ?
+  <div ref={boardRef} className="board">
+  <Header showOptions={showOptions}/>
+  {options!=false?  <Option sorting={setSort} grouping={setGroup} groupBy={groupBy} sortBy={sortBy}/>:''}
+ 
   
   
+ {!tickets||!users&& <h2>Select options</h2>}
+ {tickets && users? <div className="lanes">
+    { 
+        finalData && Object.keys(finalData).map((el,index)=>(
+        <div key={index}ref={laneRef} className="swim-lane">
+          <div className="kanban-headers">
+            <div className='kanban-headers-left'>
+            <span style={{fontSize:'20px'}}>{iconData[groupBy][index]}</span> 
+            <span className="heading">{groupBy!='priority'?el:priorityData[el]}<span className='count-gap'></span><span style={{color:'gray',fontSize:'18px'}}>{finalData[el].length}</span></span>
+            </div>
+          
+            <div className="const-icons">
+            <span><IoMdAdd/></span> 
+            <span><BiDotsHorizontalRounded/></span>
+            </div>
+          
           </div>
-           ))
+        {
+          finalData&& finalData[el].map((task,index)=>
+            <Card key={index}groupBy={groupBy} sortBy={sortBy} className='task' draggable='true' {...task} />
+                // <p className='task' draggable='true'>{task.title}</p>
+            )
+
         }
         
+
+
       </div>
-    </div>
-  
+       ))
+    }
+    
+  </div>:<h2>Loading....</h2>}
+
+</div>:<h2>Loading</h2>}
+</div>
+
+   
+      
       );
 }
 
